@@ -5,7 +5,6 @@ export const clerkWebHook = async (req, res) => {
   try {
     const wh = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
 
-    // If using express.raw middleware
     const payload = req.body.toString();
     const headers = {
       "svix-id": req.headers["svix-id"],
@@ -13,8 +12,8 @@ export const clerkWebHook = async (req, res) => {
       "svix-signature": req.headers["svix-signature"],
     };
 
-    const evt = wh.verify(payload, headers);
-    const { data, type } = JSON.parse(payload);
+    const evt = wh.verify(payload, headers); // this gives you parsed event directly
+    const { data, type } = evt;
 
     console.log("Clerk Webhook Event:", type);
 
@@ -53,3 +52,4 @@ export const clerkWebHook = async (req, res) => {
     return res.status(400).json({ success: false, error: error.message });
   }
 };
+
