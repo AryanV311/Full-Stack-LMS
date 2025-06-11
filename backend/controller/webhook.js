@@ -90,7 +90,7 @@ export const stripeWebHook = async (request, response) => {
       courseData.enrolledStudents.push(userData);
       await courseData.save();
 
-      userData.enrolledCourses.push(courseData);
+      userData.enrolledCourses.push(courseData._id);
       await userData.save();
 
       purchaseData.status = 'completed'
@@ -99,7 +99,7 @@ export const stripeWebHook = async (request, response) => {
       break;
     
     }
-    case 'payment_method.attached':{
+    case 'payment_intent.payment_failed':{
       const paymentIntent = event.data.object;
       const paymentIntentId = paymentIntent.id;
 
