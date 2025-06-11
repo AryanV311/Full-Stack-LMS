@@ -9,27 +9,38 @@ import connectCloudinary from "./config/cloudinary.js";
 import courseRouter from "./routes/courseRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 
-const app = express();
+const startServer = async () => {
+  const app = express();
 
-app.use(cors())
-app.use(express.json())
-app.use(clerkMiddleware())
-await connectCloudinary();
+  app.use(cors());
 
+  // Clerk and Stripe need raw payloads first
+  app.post('/clerk', express.raw({ type: 'application/json' }), clerkWebHook);
+  app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebHook);
 
-app.get('/', (req, res) => {
-    res.send("Api working");
-}); 
+  // Now parse JSON for all other routes
+  app.use(express.json());
 
-app.post('/clerk', express.raw({ type: 'application/json' }), clerkWebHook)
-app.use('/api/educator', educatorRouter)
-app.use('/api/course', courseRouter)
-app.use('/api/user', userRouter)
-app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebHook)
+  app.use(clerkMiddleware());
 
+  await connectCloudinary();
 
-await connectDb();
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`server is running on http://localhost:${PORT}`)
-})
+  app.get('/', (req, res) => {
+    res.send("API working 🛳️");
+  });
+
+  app.use('/api/educator', educatorRouter);
+  app.use('/api/course', courseRouter);
+  app.use('/api/user', userRouter);
+
+  await connectDb();
+
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running at http://localhost:${PORT}`);
+  });
+};
+
+startServer().catch((err) => {
+  console.error("💥 Server failed to start:", err);
+});
