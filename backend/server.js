@@ -14,11 +14,10 @@ const startServer = async () => {
 
   app.use(cors());
 
-  // Clerk and Stripe need raw payloads first
+ 
   app.post('/clerk', express.raw({ type: 'application/json' }), clerkWebHook);
   app.post('/stripe', express.raw({ type: 'application/json' }), stripeWebHook);
 
-  // Now parse JSON for all other routes
   app.use(express.json());
 
   app.use(clerkMiddleware());
