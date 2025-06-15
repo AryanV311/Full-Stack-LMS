@@ -4,7 +4,7 @@ import { addUserRating, getUserCourseProgress, getUserData, purchaseCourse, upda
 const userRouter = express.Router();
 
 userRouter.get('/data', getUserData);
-userRouter.get('/enrolled-course', userEnrolledCourse)
+userRouter.get('/enrolled-courses', userEnrolledCourse)
 userRouter.post('/purchase', purchaseCourse)
 
 userRouter.post('/update-course-progress', updateUserCourseProgress)

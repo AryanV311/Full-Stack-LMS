@@ -1,7 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import uniqid from "uniqid";
 import Quill from "quill";
 import { assets } from "../../assets/assets";
+import { AppContext } from "../../context/AppContext";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 export const AddCourse = () => {
   const quillRef = useRef(null);
@@ -14,6 +17,7 @@ export const AddCourse = () => {
   const [chapters, setChapters] = useState([]);
   const [showPopUp, setShowPopUp] = useState(false);
   const [currentChapterId, setCurrentChapterId] = useState(null);
+  const {backendUrl, getToken} = useContext(AppContext)
 
   const [lectureDetails, setLectureDetails] = useState({
     lectureTitle: "",
@@ -94,8 +98,47 @@ export const AddCourse = () => {
     })
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async(e) => {
+    try {
+      e.preventDefault();
+
+      if(!image){
+        toast.error('Thumbnail Not Selected')
+      }
+
+      const courseData = {
+        courseTitle,
+        courseDescription:quillRef.current.root.innerHTML,
+        coursePrice:Number(coursePrice),
+        discount:Number(discount),
+        courseContent:chapters
+      }
+
+      const formData = new FormData()
+      formData.append('courseData', JSON.stringify())
+      formData.append('image',image)
+
+      const token = await getToken();
+
+      const {data} = axios.post(`${backendUrl}/api/user/add-course`, formData, {headers:{
+        Authorization:`Bearer ${token}`
+      }})
+
+      if(data.success){
+        toast.success(data.message)
+        setCourseTitle('')
+        setDiscount(0)
+        setCoursePrice(0)
+        setChapters([])
+        setImage(null)
+        quillRef.current.root.innerHTML =''
+      } else {
+        toast.error(data.message)
+      }
+      
+    } catch (error) {
+      toast.error(error.message)
+    }
   }
 
   useEffect(() => {

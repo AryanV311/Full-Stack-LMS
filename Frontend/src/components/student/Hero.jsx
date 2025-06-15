@@ -25,7 +25,7 @@ export const Hero = () => {
         We bring together world-class instructors to help you achieve your
         professional goals.
       </p>
-      <SearchBar />
+      <SearchBar placeholder={'Search Course here...'} />
       
     </div>
 

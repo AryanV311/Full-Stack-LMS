@@ -57,7 +57,7 @@ export const addCourse = async(req,res) => {
 
 export const getEducatorCourse = async(req,res) => {
     try {
-        const educator = req.auth.userId;
+        const educator = req.auth()?.userId;
         const courses = await courseModel.find({educator})
 
         res.json({success:true, courses})
@@ -72,7 +72,7 @@ export const getEducatorCourse = async(req,res) => {
 
 export const educatorDashboardData = async(req, res) => {
     try {
-        const educator = req.auth.userId;
+        const educator = req.auth()?.userId;
         const courses = await courseModel.find({educator});
         const totalCourses = courses.length;
 
@@ -112,9 +112,9 @@ export const educatorDashboardData = async(req, res) => {
 
 //* get enrolled student data with purchase data
 
-export const getEnrolledStudentsData = async() => {
+export const getEnrolledStudentsData = async(req,res) => {
     try {
-        const educator = req.auth.userId;
+        const educator = req.auth()?.userId;
         const courses = await courseModel.find({educator});
 
         const courseIds = courses.map(course => course._id);
