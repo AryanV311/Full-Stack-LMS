@@ -115,7 +115,7 @@ export const AddCourse = () => {
       }
 
       const formData = new FormData()
-      formData.append('courseData', JSON.stringify())
+      formData.append('courseData', JSON.stringify(courseData))
       formData.append('image',image)
 
       const token = await getToken();

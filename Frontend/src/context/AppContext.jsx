@@ -1,10 +1,8 @@
 import { createContext, useEffect, useState } from "react";
-import { dummyCourses } from "../assets/assets";
 import humanizeDuration from "humanize-duration";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { data } from "react-router-dom";
 
 export const AppContext = createContext();
 
