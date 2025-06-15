@@ -6,7 +6,6 @@ import { AppContext } from '../../context/AppContext';
 export const CoursesSection = () => {
 
   const { allCourses } = useContext(AppContext);
-  console.log("allCourses",allCourses);
 
   return (
     <div className='py-16 md:px-40 px-8'>

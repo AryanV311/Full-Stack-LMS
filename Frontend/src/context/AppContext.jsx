@@ -23,7 +23,7 @@ export const AppContextProvider = (props) => {
     try {
       const { data } = await axios.get(`${backendUrl}/api/course/all`);
 
-      console.log("courseeee",data);
+    
 
       if (data.success) {
         setAllCourses(data.courses);
@@ -49,7 +49,7 @@ export const AppContextProvider = (props) => {
         },
       });
 
-      console.log("UserDatatat", data);
+     
 
       if (data.success) {
         setUserData(data.user);
